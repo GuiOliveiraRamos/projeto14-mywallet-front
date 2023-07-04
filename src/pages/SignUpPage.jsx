@@ -21,7 +21,7 @@ export default function SignUpPage() {
     if (password !== confirmPassword) {
       return alert("as senhas devem ser iguais");
     }
-    const request = fetch("http://localhost:5173/", {
+    const request = fetch(`${import.meta.env.VITE_API_URL}`, {
       name,
       email,
       password,
@@ -31,7 +31,9 @@ export default function SignUpPage() {
       navigate("/", { state: { data: saveData } });
     });
     request.catch(() => {
-      window.location.reload("erro ao cadastrar usuário, tente novamente");
+      window.location.reload(
+        alert("erro ao cadastrar usuário, tente novamente")
+      );
     });
 
     console.log(saveData);
@@ -42,18 +44,21 @@ export default function SignUpPage() {
       <form onSubmit={signInUp}>
         <MyWalletLogo />
         <input
+          data-test="name"
           placeholder="Nome"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
+          data-test="email"
           placeholder="E-mail"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
+          data-test="password"
           placeholder="Senha"
           type="password"
           autocomplete="new-password"
@@ -61,13 +66,16 @@ export default function SignUpPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <input
+          data-test="conf-password"
           placeholder="Confirme a senha"
           type="password"
           autoComplete="new-password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <button type="submit">Cadastrar</button>
+        <button data-test="sign-up-submit" type="submit">
+          Cadastrar
+        </button>
       </form>
 
       <Link to="/">Já tem uma conta? Entre agora!</Link>

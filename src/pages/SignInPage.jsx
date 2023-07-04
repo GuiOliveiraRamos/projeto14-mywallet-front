@@ -16,7 +16,7 @@ export default function SignInPage() {
     };
 
     try {
-      const request = await fetch("http://localhost:5173/", {
+      const request = await fetch(`${import.meta.env.VITE_API_URL}/`, {
         email,
         password,
       });
@@ -32,19 +32,23 @@ export default function SignInPage() {
       <form onSubmit={signInUp}>
         <MyWalletLogo />
         <input
+          data-test="email"
           placeholder="E-mail"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
+          data-test="password"
           placeholder="Senha"
           type="password"
           autocomplete="new-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Entrar</button>
+        <button data-test="sign-in-submit" type="submit">
+          Entrar
+        </button>
       </form>
 
       <Link to="/cadastro">Primeira vez? Cadastre-se!</Link>
