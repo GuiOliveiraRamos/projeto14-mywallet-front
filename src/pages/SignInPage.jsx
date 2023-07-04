@@ -1,28 +1,30 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import MyWalletLogo from "../components/MyWalletLogo";
+import { useState } from "react";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const signInUp = (e) => {
+  const signInUp = async (e) => {
     e.preventDefault();
     const saveData = {
       userEmail: email,
       userPassword: password,
     };
-    const request = fetch("http://localhost:5173/", {
-      email,
-      password,
-    });
-    request.then(() => {
-      navigate("/home", { state: { data: Response.data } });
-    });
-    request.catch(() => {
+
+    try {
+      const request = await fetch("http://localhost:5173/", {
+        email,
+        password,
+      });
+      navigate("/home", { state: { data: request.data } });
+    } catch (error) {
       window.location.reload("erro ao cadastrar usuário, tente novamente");
-    });
+    }
+    console.log(saveData);
   };
 
   return (
