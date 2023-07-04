@@ -1,8 +1,9 @@
 import styled from "styled-components"
 
 export default function MyWalletLogo() {
+
     return (
-        <Text>MyWallet</Text>
+        <Text to="signInPage">MyWallet</Text>
     )
 }
 
