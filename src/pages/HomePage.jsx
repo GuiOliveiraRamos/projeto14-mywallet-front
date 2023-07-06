@@ -1,8 +1,14 @@
 import styled from "styled-components";
 import { BiExit } from "react-icons/bi";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
+import { useEffect } from "react";
 
 export default function HomePage() {
+  const homePage = () => {
+    useEffect(() => {
+      axios.get(`${import.meta.env.VITE_API_URL}/`).then((res) => {});
+    });
+  };
   return (
     <HomeContainer>
       <Header>

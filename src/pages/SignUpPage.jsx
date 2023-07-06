@@ -20,18 +20,19 @@ export default function SignUpPage() {
       userConfirmPassword: confirmPassword,
     };
     if (password !== confirmPassword) {
-      return alert("as senhas devem ser iguais");
+      console.log("Password and confirm password must be the same");
+      return;
     }
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/cadastro`,
         saveData
       );
-
-      if (!response.status === 200) {
-        if (response.status === 422 || response.status === 409) {
-          alert(response.statusText);
-        }
+      if (response.status === 422) {
+        console.log(response.data);
+        console.log(response.statusText);
+      } else if (response.status === 409) {
+        console.log(response.statusText);
       } else {
         const data = response.data;
         localStorage.setItem("userData", JSON.stringify(data));

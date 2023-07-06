@@ -26,7 +26,7 @@ export default function SignInPage() {
         if (response.status === 422 || response.status === 409)
           alert(response.statusText);
         else {
-          const data = await request.json();
+          const data = await response.json();
           localStorage.setItem("userData", JSON.stringify(data));
           navigate("/home");
         }
