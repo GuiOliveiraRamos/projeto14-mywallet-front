@@ -12,8 +12,8 @@ export default function SignInPage() {
   const signInUp = async (e) => {
     e.preventDefault();
     const saveData = {
-      userEmail: email,
-      userPassword: password,
+      email: email,
+      password: password,
     };
 
     try {
@@ -26,8 +26,7 @@ export default function SignInPage() {
         if (response.status === 422 || response.status === 409)
           alert(response.statusText);
         else {
-          const data = await response.json();
-          localStorage.setItem("userData", JSON.stringify(data));
+          localStorage.setItem("userData", JSON.stringify(saveData));
           navigate("/home");
         }
       }
