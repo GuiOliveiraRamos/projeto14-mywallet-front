@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import MyWalletLogo from "../components/MyWalletLogo";
 import { useState } from "react";
+import axios from "axios";
 
 export default function SignInPage() {
   const [email, setEmail] = useState("");
@@ -16,11 +17,10 @@ export default function SignInPage() {
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/`, {
-        email,
-        password,
-        method: "POST",
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/`,
+        saveData
+      );
 
       if (!response.ok) {
         if (response.status === 422 || response.status === 409)

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MyWalletLogo from "../components/MyWalletLogo";
 import { useState } from "react";
+import axios from "axios";
 
 export default function SignUpPage() {
   const [name, setName] = useState("");
@@ -22,22 +23,17 @@ export default function SignUpPage() {
       return alert("as senhas devem ser iguais");
     }
     try {
-      const response = fetch(`${import.meta.env.VITE_API_URL}/cadastro`, {
-        name,
-        email,
-        password,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(saveData),
-      });
-      if (!response.ok) {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/cadastro`,
+        saveData
+      );
+
+      if (!response.status === 200) {
         if (response.status === 422 || response.status === 409) {
           alert(response.statusText);
         }
       } else {
-        const data = await request.json();
+        const data = response.data;
         localStorage.setItem("userData", JSON.stringify(data));
         navigate("/");
       }
