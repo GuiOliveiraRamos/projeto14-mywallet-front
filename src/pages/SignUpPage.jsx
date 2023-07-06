@@ -14,13 +14,13 @@ export default function SignUpPage() {
   const signInUp = async (e) => {
     e.preventDefault();
     const saveData = {
-      userName: name,
-      userEmail: email,
-      userPassword: password,
-      userConfirmPassword: confirmPassword,
+      name: name,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
     };
     if (password !== confirmPassword) {
-      console.log("Password and confirm password must be the same");
+      alert("Password and confirm password must be the same");
       return;
     }
     try {
