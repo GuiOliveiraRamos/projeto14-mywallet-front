@@ -16,13 +16,23 @@ export default function SignInPage() {
     };
 
     try {
-      const request = await fetch(`${import.meta.env.VITE_API_URL}/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/`, {
         email,
         password,
+        method: "POST",
       });
-      navigate("/home", { state: { data: request.data } });
+
+      if (!response.ok) {
+        if (response.status === 422 || response.status === 409)
+          alert(response.statusText);
+        else {
+          const data = await request.json();
+          localStorage.setItem("userData", JSON.stringify(data));
+          navigate("/home");
+        }
+      }
     } catch (error) {
-      window.location.reload("erro ao cadastrar usuário, tente novamente");
+      console.error(error);
     }
     console.log(saveData);
   };

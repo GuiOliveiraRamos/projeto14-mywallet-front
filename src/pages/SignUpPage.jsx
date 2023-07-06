@@ -10,7 +10,7 @@ export default function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const signInUp = (e) => {
+  const signInUp = async (e) => {
     e.preventDefault();
     const saveData = {
       userName: name,
@@ -21,22 +21,29 @@ export default function SignUpPage() {
     if (password !== confirmPassword) {
       return alert("as senhas devem ser iguais");
     }
-    const request = fetch(`${import.meta.env.VITE_API_URL}`, {
-      name,
-      email,
-      password,
-      confirmPassword,
-    });
-    request.then(() => {
-      navigate("/", { state: { data: saveData } });
-    });
-    request.catch(() => {
-      window.location.reload(
-        alert("erro ao cadastrar usuário, tente novamente")
-      );
-    });
-
-    console.log(saveData);
+    try {
+      const response = fetch(`${import.meta.env.VITE_API_URL}/cadastro`, {
+        name,
+        email,
+        password,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(saveData),
+      });
+      if (!response.ok) {
+        if (response.status === 422 || response.status === 409) {
+          alert(response.statusText);
+        }
+      } else {
+        const data = await request.json();
+        localStorage.setItem("userData", JSON.stringify(data));
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
