@@ -47,7 +47,7 @@ export default function HomePage() {
     <HomeContainer>
       <Header>
         <h1 data-test="user-name">Olá, {name}</h1>
-        <BiExit onClick={Logout} />
+        <BiExit data-test="logout" onClick={Logout} />
       </Header>
 
       <TransactionsContainer>
@@ -55,7 +55,7 @@ export default function HomePage() {
           {transactions.map((transaction) => (
             <ListItemContainer key={transaction.id}>
               <div>
-                <span>{transaction.date}</span>
+                <span data-test="registry-name">{transaction.date}</span>
                 <strong data-test="registry-name">
                   {transaction.descricao}
                 </strong>

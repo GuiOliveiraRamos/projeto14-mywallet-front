@@ -47,7 +47,7 @@ export default function TransactionsPage() {
       {tipo === "entrada" ? <h1>Nova entrada</h1> : <h1>Nova saída</h1>}
       <form onSubmit={formSubmit}>
         <input
-          data-test="registry-amount"
+          data-test="registry-amount-input"
           placeholder="Valor"
           type="text"
           value={valor}
