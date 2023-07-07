@@ -1,26 +1,22 @@
-import React from "react";
-import { Navigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function TransactionsPage() {
   const navigate = useNavigate();
+  const [valor, setValor] = useState("");
+  const [descricao, setDescricao] = useState("");
 
   const formSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      valor: e.target.valor.value,
-      descricao: e.target.descricao.value,
+      valor: valor,
+      descricao: descricao,
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = axios.post(`${import.meta.env.VITE_API_URL}/`, formData);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -30,8 +26,7 @@ export default function TransactionsPage() {
           alert(response.statusText);
         }
       } else {
-        const data = await request.json();
-        localStorage.setItem("userData", JSON.stringify(data));
+        localStorage.setItem("userData", JSON.stringify(formData));
         navigate("/home");
       }
     } catch (error) {
@@ -43,9 +38,21 @@ export default function TransactionsPage() {
     <TransactionsContainer>
       <h1>Nova TRANSAÇÃO</h1>
       <form onSubmit={formSubmit}>
-        <input placeholder="Valor" type="text" name="valor" />
-        <input placeholder="Descrição" type="text" name="descricao" />
-        <button>Salvar TRANSAÇÃO</button>
+        <input
+          data-test="registry-amount"
+          placeholder="Valor"
+          type="text"
+          value={valor}
+          onChange={(e) => setValor(e.target.value)}
+        />
+        <input
+          data-test="registry-name-input"
+          placeholder="Descrição"
+          type="text"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+        />
+        <button data-test="registry-save">Salvar TRANSAÇÃO</button>
       </form>
     </TransactionsContainer>
   );

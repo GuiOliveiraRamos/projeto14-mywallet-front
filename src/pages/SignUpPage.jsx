@@ -34,8 +34,7 @@ export default function SignUpPage() {
       } else if (response.status === 409) {
         console.log(response.statusText);
       } else {
-        const data = response.data;
-        localStorage.setItem("userData", JSON.stringify(data));
+        localStorage.setItem("userData", JSON.stringify(saveData));
         navigate("/");
       }
     } catch (error) {

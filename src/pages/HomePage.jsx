@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
+        <h1 data-test="user-name">Olá, Fulano</h1>
         <BiExit />
       </Header>
 
@@ -22,9 +22,11 @@ export default function HomePage() {
           <ListItemContainer>
             <div>
               <span>30/11</span>
-              <strong>Almoço mãe</strong>
+              <strong data-test="registry-name">Almoço mãe</strong>
             </div>
-            <Value color={"negativo"}>120,00</Value>
+            <Value data-test="registry-amount" color={"negativo"}>
+              120,00
+            </Value>
           </ListItemContainer>
 
           <ListItemContainer>
@@ -38,24 +40,30 @@ export default function HomePage() {
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value data-test="total-amount" color={"positivo"}>
+            2880,00
+          </Value>
         </article>
       </TransactionsContainer>
 
       <ButtonsContainer>
-        <button>
-          <AiOutlinePlusCircle />
-          <p>
-            Nova <br /> entrada
-          </p>
-        </button>
-        <button>
-          <AiOutlineMinusCircle />
-          <p>
-            Nova <br />
-            saída
-          </p>
-        </button>
+        <Link to="nova-transacao/entrada">
+          <button data-test="new-income">
+            <AiOutlinePlusCircle />
+            <p>
+              Nova <br /> entrada
+            </p>
+          </button>
+        </Link>
+        <Link to="nova-transacao/saida">
+          <button data-test="new-expense">
+            <AiOutlineMinusCircle />
+            <p>
+              Nova <br />
+              saída
+            </p>
+          </button>
+        </Link>
       </ButtonsContainer>
     </HomeContainer>
   );
@@ -100,7 +108,7 @@ const ButtonsContainer = styled.section`
   gap: 15px;
 
   button {
-    width: 50%;
+    width: 457px;
     height: 115px;
     font-size: 22px;
     text-align: left;
