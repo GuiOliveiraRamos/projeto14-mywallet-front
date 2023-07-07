@@ -24,7 +24,7 @@ export default function SignInPage() {
         `${import.meta.env.VITE_API_URL}/`,
         saveData
       );
-
+      console.log(response);
       if (!response.ok) {
         if (response.status === 422 || response.status === 409)
           alert(response.statusText);

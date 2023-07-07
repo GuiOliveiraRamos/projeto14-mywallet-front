@@ -9,6 +9,7 @@ import contextData from "./DataContext";
 export default function HomePage() {
   const navigate = useNavigate();
   const { token } = useContext(contextData);
+  const { name } = useContext(contextData);
 
   const config = {
     headers: {
@@ -22,7 +23,7 @@ export default function HomePage() {
   return (
     <HomeContainer>
       <Header>
-        <h1 data-test="user-name">Olá, Fulano</h1>
+        <h1 data-test="user-name">Olá, {name}</h1>
         <BiExit />
       </Header>
 

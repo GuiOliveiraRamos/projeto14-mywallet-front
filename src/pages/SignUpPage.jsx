@@ -27,6 +27,7 @@ export default function SignUpPage() {
       await axios.post(`${import.meta.env.VITE_API_URL}/cadastro`, saveData);
 
       localStorage.setItem("userData", JSON.stringify(saveData));
+      console.log(saveData);
       navigate("/");
     } catch (error) {
       if (error.status === 422 || error.status === 409) {
