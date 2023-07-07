@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { BiExit } from "react-icons/bi";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import contextData from "./DataContext";
@@ -10,6 +10,8 @@ export default function HomePage() {
   const navigate = useNavigate();
   const { token } = useContext(contextData);
   const { name } = useContext(contextData);
+  const [transactions, setTransactions] = useState([]);
+  const [balance, setBalance] = useState(0);
 
   const config = {
     headers: {
@@ -17,41 +19,64 @@ export default function HomePage() {
     },
   };
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/home`, config).then((res) => {});
-  });
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/home`, config)
+      .then((res) => {
+        setTransactions(res.data);
+        let newBalance = 0;
+        transactions.forEach((transaction) => {
+          if (transaction.tipo === "entrada") {
+            newBalance += transaction.valor;
+          } else {
+            newBalance -= transaction.valor;
+          }
+        });
+        setBalance(newBalance);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const Logout = () => {
+    localStorage.removeItem("userData");
+    navigate("/");
+  };
 
   return (
     <HomeContainer>
       <Header>
         <h1 data-test="user-name">Olá, {name}</h1>
-        <BiExit />
+        <BiExit onClick={Logout} />
       </Header>
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong data-test="registry-name">Almoço mãe</strong>
-            </div>
-            <Value data-test="registry-amount" color={"negativo"}>
-              120,00
-            </Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {transactions.map((transaction) => (
+            <ListItemContainer key={transaction.id}>
+              <div>
+                <span>{transaction.date}</span>
+                <strong data-test="registry-name">
+                  {transaction.descricao}
+                </strong>
+              </div>
+              <Value
+                data-test="registry-amount"
+                color={transaction.tipo === "entrada" ? "positivo" : "negativo"}
+              >
+                {transaction.valor}
+              </Value>
+            </ListItemContainer>
+          ))}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value data-test="total-amount" color={"positivo"}>
-            2880,00
+          <Value
+            data-test="total-amount"
+            color={balance >= 0 ? "positivo" : "negativo"}
+          >
+            {balance}
           </Value>
         </article>
       </TransactionsContainer>
