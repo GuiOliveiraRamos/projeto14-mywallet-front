@@ -10,8 +10,7 @@ export default function TransactionsPage() {
   const tipo = window.location.pathname.includes("entrada")
     ? "entrada"
     : "saida";
-  const title = tipo === "entrada" ? "Nova entrada" : "Nova saída";
-  const finalizar = tipo === "entrada" ? "Entrada" : "Saída";
+
   const { token } = useContext(contextData);
 
   const formSubmit = async (e) => {
@@ -45,7 +44,7 @@ export default function TransactionsPage() {
 
   return (
     <TransactionsContainer>
-      <h1>{title}</h1>
+      {tipo === "entrada" ? <h1>Nova entrada</h1> : <h1>Nova saída</h1>}
       <form onSubmit={formSubmit}>
         <input
           data-test="registry-amount"
@@ -61,9 +60,15 @@ export default function TransactionsPage() {
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
         />
-        <button data-test="registry-save" type="submit">
-          Salvar {finalizar}
-        </button>
+        {tipo === "entrada" ? (
+          <button data-test="registry-save" type="submit">
+            Salvar entrada
+          </button>
+        ) : (
+          <button data-test="registry-save" type="submit">
+            Salvar saída
+          </button>
+        )}
       </form>
     </TransactionsContainer>
   );
