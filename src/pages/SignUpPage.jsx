@@ -24,21 +24,14 @@ export default function SignUpPage() {
       return;
     }
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/cadastro`,
-        saveData
-      );
-      if (response.status === 422) {
-        console.log(response.data);
-        console.log(response.statusText);
-      } else if (response.status === 409) {
-        console.log(response.statusText);
-      } else {
-        localStorage.setItem("userData", JSON.stringify(saveData));
-        navigate("/");
-      }
+      await axios.post(`${import.meta.env.VITE_API_URL}/cadastro`, saveData);
+
+      localStorage.setItem("userData", JSON.stringify(saveData));
+      navigate("/");
     } catch (error) {
-      console.error(error);
+      if (error.status === 422 || error.status === 409) {
+        alert(error.response.data.message);
+      }
     }
   };
 

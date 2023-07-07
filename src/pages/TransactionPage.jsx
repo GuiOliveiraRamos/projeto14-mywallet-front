@@ -27,19 +27,18 @@ export default function TransactionsPage() {
       },
     };
     try {
-      const response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_URL}/nova-transacao/${tipo}`,
         formData,
         config
       );
 
-      if (response.status === 401 || response.status === 422) {
-        return alert(response.statusText);
-      } else {
-        localStorage.setItem("userData", JSON.stringify(formData));
-        navigate("/home");
-      }
+      localStorage.setItem("userData", JSON.stringify(formData));
+      navigate("/home");
     } catch (error) {
+      if (error.response.status === 422 || error.response.status === 401) {
+        alert(error.response.data.message);
+      }
       console.log(error);
     }
   };
