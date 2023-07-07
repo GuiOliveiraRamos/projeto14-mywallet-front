@@ -23,20 +23,23 @@ export default function HomePage() {
       .get(`${import.meta.env.VITE_API_URL}/home`, config)
       .then((res) => {
         setTransactions(res.data);
-        let newBalance = 0;
-        transactions.forEach((transaction) => {
-          if (transaction.tipo === "entrada") {
-            newBalance += transaction.valor;
-          } else {
-            newBalance -= transaction.valor;
-          }
-        });
-        setBalance(newBalance);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    let newBalance = 0;
+    transactions.forEach((transaction) => {
+      if (transaction.tipo === "entrada") {
+        newBalance += transaction.valor;
+      } else {
+        newBalance -= transaction.valor;
+      }
+    });
+    setBalance(newBalance);
+  }, [transactions]);
 
   const Logout = () => {
     localStorage.removeItem("userData");
