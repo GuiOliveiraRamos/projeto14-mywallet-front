@@ -1,15 +1,24 @@
 import styled from "styled-components";
 import { BiExit } from "react-icons/bi";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
-import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import contextData from "./DataContext";
 
 export default function HomePage() {
-  const homePage = () => {
-    useEffect(() => {
-      axios.get(`${import.meta.env.VITE_API_URL}/`).then((res) => {});
-    });
+  const navigate = useNavigate();
+  const { token } = useContext(contextData);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/home`, config).then((res) => {});
+  });
+
   return (
     <HomeContainer>
       <Header>
@@ -47,23 +56,26 @@ export default function HomePage() {
       </TransactionsContainer>
 
       <ButtonsContainer>
-        <Link to="nova-transacao/entrada">
-          <button data-test="new-income">
-            <AiOutlinePlusCircle />
-            <p>
-              Nova <br /> entrada
-            </p>
-          </button>
-        </Link>
-        <Link to="nova-transacao/saida">
-          <button data-test="new-expense">
-            <AiOutlineMinusCircle />
-            <p>
-              Nova <br />
-              saída
-            </p>
-          </button>
-        </Link>
+        <button
+          data-test="new-income"
+          onClick={() => navigate("/nova-transacao/entrada")}
+        >
+          <AiOutlinePlusCircle />
+          <p>
+            Nova <br /> entrada
+          </p>
+        </button>
+
+        <button
+          data-test="new-expense"
+          onClick={() => navigate("/nova-transacao/saida")}
+        >
+          <AiOutlineMinusCircle />
+          <p>
+            Nova <br />
+            saída
+          </p>
+        </button>
       </ButtonsContainer>
     </HomeContainer>
   );
@@ -108,7 +120,7 @@ const ButtonsContainer = styled.section`
   gap: 15px;
 
   button {
-    width: 457px;
+    width: 50%;
     height: 115px;
     font-size: 22px;
     text-align: left;

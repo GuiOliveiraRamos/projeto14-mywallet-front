@@ -8,12 +8,20 @@ import contextData from "./pages/DataContext";
 import { useState } from "react";
 
 export default function App() {
+  const [token, setToken] = useState(undefined);
   const [name, setName] = useState("");
 
   return (
     <PagesContainer>
       <BrowserRouter>
-        <contextData.Provider value={{ name: name }}>
+        <contextData.Provider
+          value={{
+            name: name,
+            setName: setName,
+            token: token,
+            setToken: setToken,
+          }}
+        >
           <Routes>
             <Route path="/" element={<SignInPage />} />
             <Route path="/cadastro" element={<SignUpPage />} />
