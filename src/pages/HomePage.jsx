@@ -22,7 +22,7 @@ export default function HomePage() {
     axios
       .get(`${import.meta.env.VITE_API_URL}/home`, config)
       .then((res) => {
-        setTransactions(res.data);
+        setTransactions(res.data.reverse());
       })
       .catch((err) => {
         console.log(err);
@@ -55,7 +55,7 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transactions.map((transaction) => (
+          {transactions.reverse().map((transaction) => (
             <ListItemContainer key={transaction.id}>
               <div>
                 <span data-test="registry-name">{transaction.date}</span>
