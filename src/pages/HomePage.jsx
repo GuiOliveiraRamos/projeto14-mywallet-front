@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import contextData from "./DataContext";
+import { number } from "prop-types";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -113,7 +114,7 @@ export default function HomePage() {
                     transaction.tipo === "entrada" ? "positivo" : "negativo"
                   }
                 >
-                  {transaction.valor.toFixed(2).replace(".", ",")}
+                  {Number(transaction.valor).toFixed(2).replace(".", ",")}
                   <DeleteButton
                     data-test="registry-delete"
                     onClick={() => Delete(transaction._id)}
@@ -132,7 +133,7 @@ export default function HomePage() {
             data-test="total-amount"
             color={balance >= 0 ? "positivo" : "negativo"}
           >
-            {balance.toFixed(2).replace(".", ",")}
+            {Number(balance).toFixed(2).replace(".", ",")}
           </Value>
         </article>
       </TransactionsContainer>
