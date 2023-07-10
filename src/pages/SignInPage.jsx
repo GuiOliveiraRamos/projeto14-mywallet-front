@@ -17,6 +17,7 @@ export default function SignInPage() {
     const saveData = {
       email: email,
       password: password,
+      token: null,
     };
 
     try {
@@ -29,9 +30,11 @@ export default function SignInPage() {
         if (response.status === 422 || response.status === 409)
           alert(response.statusText);
         else {
-          localStorage.setItem("userData", JSON.stringify(saveData));
+          saveData.token = response.data.token;
           setToken(response.data.token);
           setName(response.data.name);
+          localStorage.setItem("userData", JSON.stringify(saveData));
+          console.log(localStorage);
           navigate("/home");
         }
       }

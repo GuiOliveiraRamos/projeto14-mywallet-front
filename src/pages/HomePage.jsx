@@ -13,21 +13,28 @@ export default function HomePage() {
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(0);
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/home`, config)
-      .then((res) => {
-        setTransactions(res.data.reverse());
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    const userData = localStorage.getItem("userData");
+    if (!userData) {
+      navigate("/");
+    } else {
+      const { token } = JSON.parse(userData);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      axios
+        .get(`${import.meta.env.VITE_API_URL}/home`, config)
+        .then((res) => {
+          setTransactions(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [navigate]);
 
   useEffect(() => {
     let newBalance = 0;
@@ -43,6 +50,7 @@ export default function HomePage() {
 
   const Logout = () => {
     localStorage.removeItem("userData");
+    console.log(localStorage);
     navigate("/");
   };
 
@@ -55,22 +63,26 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transactions.map((transaction) => (
-            <ListItemContainer key={transaction.id}>
-              <div>
-                <span data-test="registry-name">{transaction.date}</span>
-                <strong data-test="registry-name">
-                  {transaction.descricao}
-                </strong>
-              </div>
-              <Value
-                data-test="registry-amount"
-                color={transaction.tipo === "entrada" ? "positivo" : "negativo"}
-              >
-                {transaction.valor}
-              </Value>
-            </ListItemContainer>
-          ))}
+          {transactions
+            .map((transaction) => (
+              <ListItemContainer key={transaction.id}>
+                <div>
+                  <span data-test="registry-name">{transaction.date}</span>
+                  <strong data-test="registry-name">
+                    {transaction.descricao}
+                  </strong>
+                </div>
+                <Value
+                  data-test="registry-amount"
+                  color={
+                    transaction.tipo === "entrada" ? "positivo" : "negativo"
+                  }
+                >
+                  {transaction.valor}
+                </Value>
+              </ListItemContainer>
+            ))
+            .reverse()}
         </ul>
 
         <article>
@@ -79,7 +91,7 @@ export default function HomePage() {
             data-test="total-amount"
             color={balance >= 0 ? "positivo" : "negativo"}
           >
-            {balance}
+            {balance.toFixed(2).replace(".", ",")}
           </Value>
         </article>
       </TransactionsContainer>
