@@ -8,7 +8,6 @@ import contextData from "./DataContext";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { token } = useContext(contextData);
   const { name } = useContext(contextData);
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(0);
@@ -54,6 +53,42 @@ export default function HomePage() {
     navigate("/");
   };
 
+  function Delete(transactionId) {
+    const userData = localStorage.getItem("userData");
+    if (!userData) {
+      navigate("/");
+    } else {
+      const { token } = JSON.parse(userData);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const confirm = window.confirm(
+        "Excluir essa transação? Essa operação não pode ser desfeita!"
+      );
+      if (confirm) {
+        axios
+          .delete(
+            `${import.meta.env.VITE_API_URL}/home/${transactionId}`,
+            config
+          )
+          .then(() => {
+            const updatedList = transactions.filter(
+              (t) => t._id !== transactionId
+            );
+            setTransactions(updatedList);
+          })
+          .catch((error) => {
+            if (error.status === 401) {
+              Logout();
+            }
+            console.log(error);
+          });
+      }
+    }
+  }
+
   return (
     <HomeContainer>
       <Header>
@@ -65,7 +100,7 @@ export default function HomePage() {
         <ul>
           {transactions
             .map((transaction) => (
-              <ListItemContainer key={transaction.id}>
+              <ListItemContainer key={transaction._id}>
                 <div>
                   <span>{transaction.date}</span>
                   <strong data-test="registry-name">
@@ -79,6 +114,12 @@ export default function HomePage() {
                   }
                 >
                   {transaction.valor.toFixed(2).replace(".", ",")}
+                  <DeleteButton
+                    data-test="registry-delete"
+                    onClick={() => Delete(transaction._id)}
+                  >
+                    x
+                  </DeleteButton>
                 </Value>
               </ListItemContainer>
             ))
@@ -141,7 +182,7 @@ const TransactionsContainer = styled.article`
   background-color: #fff;
   color: #000;
   border-radius: 5px;
-  padding: 16px;
+  padding: 16px 16px 16px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -177,6 +218,9 @@ const Value = styled.div`
   font-size: 16px;
   text-align: right;
   color: ${(props) => (props.color === "positivo" ? "green" : "red")};
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 const ListItemContainer = styled.li`
   display: flex;
@@ -184,9 +228,12 @@ const ListItemContainer = styled.li`
   align-items: center;
   margin-bottom: 8px;
   color: #000000;
-  margin-right: 10px;
   div span {
     color: #c6c6c6;
-    margin-right: 10px;
+    margin-right: 16px;
   }
+`;
+const DeleteButton = styled.div`
+  color: #c6c6c6;
+  cursor: pointer;
 `;
