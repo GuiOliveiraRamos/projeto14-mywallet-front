@@ -67,7 +67,7 @@ export default function HomePage() {
             .map((transaction) => (
               <ListItemContainer key={transaction.id}>
                 <div>
-                  <span data-test="registry-name">{transaction.date}</span>
+                  <span>{transaction.date}</span>
                   <strong data-test="registry-name">
                     {transaction.descricao}
                   </strong>
