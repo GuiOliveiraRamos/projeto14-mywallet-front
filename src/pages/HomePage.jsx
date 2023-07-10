@@ -78,7 +78,7 @@ export default function HomePage() {
                     transaction.tipo === "entrada" ? "positivo" : "negativo"
                   }
                 >
-                  {transaction.valor}
+                  {transaction.valor.toFixed(2).replace(".", ",")}
                 </Value>
               </ListItemContainer>
             ))
