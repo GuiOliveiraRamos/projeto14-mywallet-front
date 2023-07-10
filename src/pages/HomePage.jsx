@@ -55,7 +55,7 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transactions.reverse().map((transaction) => (
+          {transactions.map((transaction) => (
             <ListItemContainer key={transaction.id}>
               <div>
                 <span data-test="registry-name">{transaction.date}</span>
